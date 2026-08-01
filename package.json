@@ -1,0 +1,70 @@
+{
+  "name": "@halos-org/skip-freeboard-panel",
+  "version": "1.0.0",
+  "description": "Signal K server plugin that registers Skip as a Freeboard-SK plotter-extension panel and widgets.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk-category-instruments",
+    "signalk",
+    "freeboard",
+    "plotter-extension",
+    "skip",
+    "marine"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src/ test/",
+    "lint:fix": "eslint --fix src/ test/",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "ci": "npm run typecheck && npm run lint && npm run format:check && npm run test",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halos-org/skip-freeboard-panel.git"
+  },
+  "author": "Matti Airas <matti.airas@hatlabs.fi>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/halos-org/skip-freeboard-panel/issues"
+  },
+  "homepage": "https://github.com/halos-org/skip-freeboard-panel#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "signalk": {
+    "requires": [
+      "@halos-org/skip"
+    ]
+  },
+  "signalk-plugin-enabled-by-default": true,
+  "peerDependencies": {
+    "@signalk/server-api": "^2.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@signalk/server-api": "^2.10.0",
+    "@types/node": "^22.15.0",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^10.1.2",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.29.1",
+    "vitest": "^3.1.1"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ]
+}
