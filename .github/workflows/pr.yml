@@ -8,10 +8,16 @@ jobs:
   checks:
     uses: halos-org/shared-workflows/.github/workflows/checks.yml@feat/v1-pr-checks
 
+  never-runs:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: true
+
   # Branch protection requires only this job. List every other job in needs,
   # including jobs defined in this file.
   status:
-    needs: [checks]
+    needs: [checks, never-runs]
     if: always()
     runs-on: ubuntu-latest
     permissions: {}
