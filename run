@@ -41,7 +41,7 @@ deploy_halos() {
         echo ""
         echo "Examples:"
         echo "  ./run deploy-halos local          # on the device itself"
-        echo "  ./run deploy-halos halpi.hurma    # from a dev machine, over ssh"
+        echo "  ./run deploy-halos my-boat.local  # from a dev machine, over ssh"
         return 1
     fi
 

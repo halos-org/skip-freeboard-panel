@@ -1,0 +1,107 @@
+# yaml-language-server: $schema=https://storage.googleapis.com/coderabbit_public_assets/schema.v2.json
+language: en-US
+
+# Under 250 characters, the schema's limit.
+tone_instructions: >-
+  Name the trigger, the code path, and the consequence for a Freeboard-SK user
+  for every finding. If you cannot name one, do not raise it. No praise, no
+  preamble, no restating the diff.
+
+reviews:
+  profile: assertive
+  poem: false
+  in_progress_fortune: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+
+  high_level_summary_instructions: |
+    Write in present tense. Lead with what changes in Freeboard-SK or the
+    Signal K server, not with the file list. Do not restate the PR description.
+
+  pre_merge_checks:
+    # Quoted: bare `off` is a YAML 1.1 boolean, and this field takes a string.
+    docstrings:
+      mode: "off"
+    description:
+      mode: "off"
+
+  tools:
+    # `npm run ci` runs ESLint on src/ and test/ in every PR's checks.
+    eslint:
+      enabled: false
+    # The only Markdown is README.md.
+    markdownlint:
+      enabled: false
+    languagetool:
+      enabled: false
+
+  path_filters:
+    - "!package-lock.json"
+    - "!dist/**"
+
+  path_instructions:
+    - path: "**/*"
+      instructions: |
+        ## What this is
+        A Signal K server plugin that registers Skip as a Freeboard-SK
+        plotter extension: a toolbar button that opens Skip in a side panel,
+        and Wind Steer widgets. It ships no UI; every iframe loads the Skip
+        webapp served by the separate `@halos-org/skip` package.
+
+        ## Cross-package contract
+        The manifest URLs must match Skip: the serving path
+        `/@halos-org/skip/`, the `?embed=1` flag, Skip's widget type id
+        `widget-wind-steer`, and the `#/widget/:type` and
+        `#/widget-config/:type` routes. The tests pin these strings, so a
+        change that updates source and tests together passes CI and still
+        breaks the panel or widgets. Flag such a change unless the PR names
+        the matching Skip change.
+
+        ## Saved state on devices
+        Signal K stores the plugin's configuration under the plugin id
+        `skip-plotter-panel`, and Freeboard-SK saves each placed widget
+        under that id and the manifest widget ids (`wind-steer-1x1`,
+        `wind-steer-2x2`). Flag a change to any of them: users lose their
+        configuration or placed widgets on upgrade.
+
+        ## Privacy
+        This repository is public. Flag any internal hostname, address or
+        network detail. Placeholders only.
+
+        ## Do not ask for these
+        - Whether `VERSION` was bumped at all; `version-bump-check` enforces
+          that, and `check-versions` keeps it equal to `package.json`. Do
+          flag a change whose semver level is higher than the bump that
+          opened the current release cycle, which CI cannot see.
+        - A local npm publish job. Releases publish through
+          halos-org/shared-workflows `publish-npm.yml`, whose trusted
+          publisher names `.github/workflows/release.yml`; keep that file
+          name.
+
+        ## Runtime dependencies
+        The package has none on purpose. Flag a runtime (non-type) import in
+        `src/` of anything other than a Node built-in: CI installs
+        devDependencies, so it passes, and the published plugin fails to
+        load.
+
+    - path: "src/**/*.ts"
+      instructions: |
+        The plugin reads its version from the shipped `package.json` at
+        runtime, one level above `dist/`. Do not suggest importing
+        `package.json` into the compilation; that changes the output layout.
+
+        Check the manifest against the Freeboard-SK plotter-extension
+        provider documentation linked at the top of `src/index.ts`.
+
+    - path: "test/**/*.ts"
+      instructions: |
+        Flag a test that cannot fail when the manifest URL, id or shape it
+        covers is changed.
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - README.md
